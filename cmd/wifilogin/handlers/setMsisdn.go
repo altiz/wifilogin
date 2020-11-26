@@ -34,7 +34,7 @@ type login struct {
 // Param [param_name] [param_type] [data_type] [required/mandatory] [description]
 // @Param q body models.TDelo false "name search by q"
 // @Success 200 {object} models.TData_resp
-// @Router /changeclientcard/ [post]
+// @Router //set-msisdn/ [post]
 func Setmsisdn(c *gin.Context) {
 
 	var req models.Tlogin_req
