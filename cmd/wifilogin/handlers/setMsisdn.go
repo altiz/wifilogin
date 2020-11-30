@@ -75,7 +75,7 @@ func Setmsisdn(c *gin.Context) {
 		fmt.Println(err)
 	}
 
-	db.Exec("update wifi_02_login set  bdate = sysdate,  msisdn = :1 where   id = :2", "9872305570", id.id)
+	db.Exec("update wifi_02_login set  bdate = sysdate,  msisdn = :1 where   id = :2", req.Phone, id.id)
 
 	/*fmt.Println("OK")
 	var thedate string
