@@ -44,6 +44,7 @@ func Setmsisdn(c *gin.Context) {
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 	}
+	fmt.Println(req)
 
 	db, err := sql.Open("godror", `user="wifiservice" password="wifi" connectString="e-scan:1521/irbis"  poolSessionMaxLifetime=24h poolSessionTimeout=30s`)
 	if err != nil {
@@ -75,7 +76,7 @@ func Setmsisdn(c *gin.Context) {
 		fmt.Println(err)
 	}
 
-	db.Exec("update wifi_02_login set  bdate = sysdate,  msisdn = :1 where   id = :2", req.Phone, id.id)
+	db.Exec("update wifi_02_login set  bdate = sysdate,  msisdn = :1 where   id = :2", req.Msisdn, id.id)
 
 	/*fmt.Println("OK")
 	var thedate string

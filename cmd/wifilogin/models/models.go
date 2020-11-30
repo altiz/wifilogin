@@ -2,7 +2,7 @@ package models
 
 // Data Model
 type Tlogin_req struct {
-	Phone string `gorm:"column:msisdn" json:"msisnd"`
+	Msisdn string `gorm:"column:msisdn" json:"msisdn"`
 }
 
 type Tlogin_resp struct {
