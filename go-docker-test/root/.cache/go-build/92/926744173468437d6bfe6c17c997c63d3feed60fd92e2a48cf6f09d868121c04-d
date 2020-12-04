@@ -1,0 +1,11 @@
+./action.go
+./history.go
+./host.go
+./hostgroup.go
+./hostinterface.go
+./mediatype.go
+./template.go
+./user.go
+./usergroup.go
+./usermacro.go
+./zabbix.go
