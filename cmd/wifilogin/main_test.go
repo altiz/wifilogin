@@ -21,8 +21,8 @@ type data1 struct {
 }
 
 func TestMain(t *testing.T) {
-	router := setupRouter()
-
+	router := SetupRouter()
+	router.Run(":5000")
 	Convey("Users endpoints should respond correctly", t, func() {
 		Convey("Test Index", func() {
 			// it's safe to ignore error here, because we're manually entering URL
@@ -76,11 +76,38 @@ func TestMain(t *testing.T) {
 			if err := json.Unmarshal(body, &obj); err != nil {
 				panic(err)
 			}
-			var l int = 0
+			var l string = "0"
 			if timeCount > 3 {
-				l = 1
+				l = "1"
 			}
-			So(l, ShouldEqual, 0)
+			So(l, ShouldEqual, "0")
+		})
+
+		Convey("Test API-multi", func() {
+			//send message
+			beginTime_ := time.Now().UnixNano()
+			msisdn := &data{Msisdn: "9872305570"}
+			dat, err := json.Marshal(msisdn)
+			So(err, ShouldBeNil)
+			buf := bytes.NewBuffer(dat)
+			req, err := http.NewRequest("POST", "http://localhost:5000/billing/api/v1/set-msisdn_test", buf)
+			So(err, ShouldBeNil)
+			w := httptest.NewRecorder()
+			router.ServeHTTP(w, req)
+			timeCount := time.Now().UnixNano() - beginTime_
+			So(w.Code, ShouldEqual, http.StatusOK)
+			//resp
+			body := w.Body.Bytes()
+			var obj *data1
+
+			if err := json.Unmarshal(body, &obj); err != nil {
+				panic(err)
+			}
+			var l string = "0"
+			if timeCount > 30 {
+				l = "1"
+			}
+			So(l, ShouldEqual, "0")
 		})
 	})
 }

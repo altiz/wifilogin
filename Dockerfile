@@ -8,8 +8,8 @@ COPY . .
 
 RUN apt-get update && apt-get install -y libaio1 wget unzip
 RUN go get github.com/githubnemo/CompileDaemon
-RUN go get gopkg.in/goracle.v2
-RUN go get github.com/nixys/nxs-go-zabbix/v5
+#RUN go get gopkg.in/goracle.v2
+#RUN go get github.com/nixys/nxs-go-zabbix/v5
 
 WORKDIR /opt/oracle
 
@@ -21,11 +21,13 @@ RUN wget https://download.oracle.com/otn_software/linux/instantclient/instantcli
     echo /opt/oracle/instantclient* > /etc/ld.so.conf.d/oracle-instantclient.conf && \
     ldconfig
 
-WORKDIR /app/cmd/wifilogin/
-
+WORKDIR /app
+RUN go mod vendor
 #RUN go build -o main .
-
-
+WORKDIR /app/cmd/wifilogin
+#RUN go test
+EXPOSE 5000
 ENTRYPOINT CompileDaemon --build="go build main.go" --command=./main
 
 #ENTRYPOINT /app/cmd/docktest/main
+#EXPOSE 5000
