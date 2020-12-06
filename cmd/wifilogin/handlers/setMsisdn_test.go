@@ -77,6 +77,7 @@ func Setmsisdn_test(c *gin.Context) {
 	}
 
 	db.Exec("update wifi_02_login_test set  bdate = sysdate,  msisdn = :1 where   id = :2", req.Msisdn, id.id)
+	db.Close()
 
 	/*fmt.Println("OK")
 	var thedate string
