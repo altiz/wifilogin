@@ -47,6 +47,9 @@ func Setmsisdn_test(c *gin.Context) {
 	fmt.Println(req)
 
 	db, err := sql.Open("godror", `user="wifiservice" password="wifi" connectString="e-scan:1521/irbis" poolMaxSessions=2000 poolIncrement=15`)
+	db.SetMaxOpenConns(50)
+	db.SetMaxIdleConns(10)
+	defer db.Close()
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -58,10 +61,12 @@ func Setmsisdn_test(c *gin.Context) {
 	}
 	id := id{}
 	rows.Next()
+	defer rows.Close()
 	err1 := rows.Scan(&id.id)
 	if err1 != nil {
 		fmt.Println(err)
 	}
+	rows.Close()
 	fmt.Println(id)
 	fmt.Println("OK")
 	rows, err2 := db.Query("SELECT login, passwd FROM wifi_02_login_test where id = " + strconv.Itoa(id.id))
@@ -75,7 +80,7 @@ func Setmsisdn_test(c *gin.Context) {
 	if err3 != nil {
 		fmt.Println(err)
 	}
-
+	rows.Close()
 	db.Exec("update wifi_02_login_test set  bdate = sysdate,  msisdn = :1 where   id = :2", req.Msisdn, id.id)
 	db.Close()
 
