@@ -21,7 +21,7 @@ type data1 struct {
 }
 
 func TestMain(t *testing.T) {
-	router := SetupRouter()
+	//router := SetupRouter()
 	router.Run(":5000")
 	Convey("Users endpoints should respond correctly", t, func() {
 		Convey("Test Index", func() {
