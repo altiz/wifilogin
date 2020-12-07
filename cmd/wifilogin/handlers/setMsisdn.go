@@ -57,7 +57,7 @@ func Setmsisdn(c *gin.Context) {
 		logs.WithFields(logs.Fields{
 			"Msisdn": req.Msisdn,
 		}).Info(err)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 	}
 
 	logs.WithFields(logs.Fields{
@@ -69,7 +69,7 @@ func Setmsisdn(c *gin.Context) {
 		logs.WithFields(logs.Fields{
 			"Msisdn": req.Msisdn,
 		}).Info(err)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 	}
 	defer rows.Close()
 	id := id{}
@@ -79,7 +79,7 @@ func Setmsisdn(c *gin.Context) {
 		logs.WithFields(logs.Fields{
 			"Msisdn": req.Msisdn,
 		}).Info(err)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 	}
 	rows.Close()
 
@@ -88,7 +88,7 @@ func Setmsisdn(c *gin.Context) {
 		logs.WithFields(logs.Fields{
 			"Msisdn": req.Msisdn,
 		}).Info(err)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 	}
 
 	logins := login{}
@@ -98,7 +98,7 @@ func Setmsisdn(c *gin.Context) {
 		logs.WithFields(logs.Fields{
 			"Msisdn": req.Msisdn,
 		}).Info(err)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 	}
 	rows.Close()
 
