@@ -17,14 +17,14 @@ import (
 	_ "github.com/godror/godror"
 )
 
-type id struct {
+/*type id struct {
 	id int
 }
 
 type login struct {
 	login  string
 	passwd string
-}
+}*/
 
 // set-msisdn godoc
 // @Summary Сохраняет данные по делам в биллинговой системе
@@ -48,7 +48,7 @@ func Setmsisdn_test(c *gin.Context) {
 
 	db, err := sql.Open("godror", `user="wifiservice" password="wifi" connectString="e-scan:1521/irbis" poolMaxSessions=2000 poolIncrement=15 standaloneConnection=1`)
 	db.SetMaxOpenConns(50)
-	db.SetMaxIdleConns(10)
+	db.SetMaxIdleConns(0)
 	defer db.Close()
 	if err != nil {
 		fmt.Println(err)
@@ -83,7 +83,6 @@ func Setmsisdn_test(c *gin.Context) {
 	rows.Close()
 	db.Exec("update wifi_02_login_test set  bdate = sysdate,  msisdn = :1 where   id = :2", req.Msisdn, id.id)
 	db.Close()
-
 	fmt.Println("OK")
 	defer db.Close()
 	fmt.Println(logins)

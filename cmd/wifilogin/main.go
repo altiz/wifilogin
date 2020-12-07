@@ -42,6 +42,7 @@ func SetupRouter() *gin.Engine {
 // @host 192.168.114.121:5000
 // @BasePath /wifi/api/v1
 func main() {
+
 	router := SetupRouter()
 	/*if os.Args[1] != nil {
 		port := "5000"

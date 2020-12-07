@@ -8,7 +8,6 @@ import (
 	logs "github.com/sirupsen/logrus"
 
 	"database/sql"
-	"fmt"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -42,68 +41,78 @@ func Setmsisdn(c *gin.Context) {
 	logs.SetFormatter(&logs.JSONFormatter{})
 
 	if err := c.ShouldBindJSON(&req); err != nil {
+		//monitoring
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 	}
-	fmt.Println(req)
 
-	db, err := sql.Open("godror", `user="wifiservice" password="wifi" connectString="e-scan:1521/irbis"  poolSessionMaxLifetime=24h poolSessionTimeout=30s`)
+	logs.WithFields(logs.Fields{
+		"Msisdn": req.Msisdn,
+	}).Info("Request is accepted")
+
+	db, err := sql.Open("godror", `user="wifiservice" password="wifi" connectString="e-scan:1521/irbis" poolMaxSessions=2000 poolIncrement=15 standaloneConnection=1`)
+	db.SetMaxOpenConns(50)
+	db.SetMaxIdleConns(0)
+	defer db.Close()
 	if err != nil {
-		fmt.Println(err)
+		logs.WithFields(logs.Fields{
+			"Msisdn": req.Msisdn,
+		}).Info(err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()
 	}
 
-	fmt.Println("OK")
+	logs.WithFields(logs.Fields{
+		"DB": "e-scan:1521/irbis",
+	}).Info("Session raised")
+
 	rows, err := db.Query("select wifi_02_login_seq.nextval id from dual")
 	if err != nil {
-		panic(err)
+		logs.WithFields(logs.Fields{
+			"Msisdn": req.Msisdn,
+		}).Info(err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()
 	}
+	defer rows.Close()
 	id := id{}
 	rows.Next()
 	err1 := rows.Scan(&id.id)
 	if err1 != nil {
-		fmt.Println(err)
+		logs.WithFields(logs.Fields{
+			"Msisdn": req.Msisdn,
+		}).Info(err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()
 	}
-	fmt.Println(id)
-	fmt.Println("OK")
+	rows.Close()
+
 	rows, err2 := db.Query("SELECT login, passwd FROM wifi_02_login where id = " + strconv.Itoa(id.id))
 	if err2 != nil {
-		panic(err)
+		logs.WithFields(logs.Fields{
+			"Msisdn": req.Msisdn,
+		}).Info(err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()
 	}
 
 	logins := login{}
 	rows.Next()
 	err3 := rows.Scan(&logins.login, &logins.passwd)
 	if err3 != nil {
-		fmt.Println(err)
+		logs.WithFields(logs.Fields{
+			"Msisdn": req.Msisdn,
+		}).Info(err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()
 	}
+	rows.Close()
 
 	db.Exec("update wifi_02_login set  bdate = sysdate,  msisdn = :1 where   id = :2", req.Msisdn, id.id)
+	db.Close()
 
-	/*fmt.Println("OK")
-	var thedate string
-	for rows.Next() {
-		rows.Scan(&thedate)
-	}*/
-	fmt.Println("OK")
 	defer db.Close()
-	fmt.Println(logins)
-	/*
-		ei := TTime{}
-		eil := []TTime{}
-		for rows.Next() {
 
-			if err != nil {
-				log.Fatal(err)
-			}
-			eil = append(eil, ei)
-		}*/
-	//defer rows.Close()
-
-	/*logs.WithFields(logs.Fields{
-		"Client":      json.Client,
-		"Decisions":   json.Decisions,
-		"ServiceName": json.ServiceName,
-	}).Info("Starting the service...")*/
 	resp.Login = logins.login
 	resp.Passwd = logins.passwd
 	c.JSON(http.StatusOK, resp)
+
+	logs.WithFields(logs.Fields{
+		"login":  logins.login,
+		"passwd": logins.passwd,
+	}).Info("Response sent")
 }

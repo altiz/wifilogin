@@ -25,6 +25,10 @@ type TVersion struct {
 	Release   string `gorm:"column:first_name" json:"release"`
 }
 
+type Debug struct {
+	IsDebug int
+}
+
 /*
 type TDecisions struct {
 	Message      string `gorm:"column:message" json:"message"`

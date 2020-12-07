@@ -21,6 +21,6 @@ func InitializeRoutes(router *gin.Engine) {
 	version1.GET("/", handlers.IndexPage)
 	version1.POST("/home", handlers.HomeHandlers)
 	version1.POST("/set-msisdn", handlers.Setmsisdn)
-	version1.POST("/set-msisdn_test", handlers.Setmsisdn)
+	version1.POST("/set-msisdn_test", handlers.Setmsisdn_test)
 
 }
