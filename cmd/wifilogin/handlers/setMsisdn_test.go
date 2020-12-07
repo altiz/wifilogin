@@ -46,7 +46,7 @@ func Setmsisdn_test(c *gin.Context) {
 	}
 	fmt.Println(req)
 
-	db, err := sql.Open("godror", `user="wifiservice" password="wifi" connectString="e-scan:1521/irbis" poolMaxSessions=2000 poolIncrement=15`)
+	db, err := sql.Open("godror", `user="wifiservice" password="wifi" connectString="e-scan:1521/irbis" poolMaxSessions=2000 poolIncrement=15 standaloneConnection=1`)
 	db.SetMaxOpenConns(50)
 	db.SetMaxIdleConns(10)
 	defer db.Close()
