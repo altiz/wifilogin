@@ -84,31 +84,10 @@ func Setmsisdn_test(c *gin.Context) {
 	db.Exec("update wifi_02_login_test set  bdate = sysdate,  msisdn = :1 where   id = :2", req.Msisdn, id.id)
 	db.Close()
 
-	/*fmt.Println("OK")
-	var thedate string
-	for rows.Next() {
-		rows.Scan(&thedate)
-	}*/
 	fmt.Println("OK")
 	defer db.Close()
 	fmt.Println(logins)
-	/*
-		ei := TTime{}
-		eil := []TTime{}
-		for rows.Next() {
 
-			if err != nil {
-				log.Fatal(err)
-			}
-			eil = append(eil, ei)
-		}*/
-	//defer rows.Close()
-
-	/*logs.WithFields(logs.Fields{
-		"Client":      json.Client,
-		"Decisions":   json.Decisions,
-		"ServiceName": json.ServiceName,
-	}).Info("Starting the service...")*/
 	resp.Login = logins.login
 	resp.Passwd = logins.passwd
 	c.JSON(http.StatusOK, resp)
