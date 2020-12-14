@@ -83,7 +83,7 @@ func Setmsisdn(c *gin.Context) {
 	}
 	rows.Close()
 
-	rows, err2 := db.Query("SELECT login, passwd FROM wifi_02_login_temp where id = " + strconv.Itoa(id.id))
+	rows, err2 := db.Query("SELECT login, passwd FROM wifi_02_login where id = " + strconv.Itoa(id.id))
 	if err2 != nil {
 		logs.WithFields(logs.Fields{
 			"Msisdn": req.Msisdn,
@@ -102,7 +102,7 @@ func Setmsisdn(c *gin.Context) {
 	}
 	rows.Close()
 
-	db.Exec("update wifi_02_login_temp set  bdate = sysdate,  msisdn = :1 where   id = :2", req.Msisdn, id.id)
+	db.Exec("update wifi_02_login set  bdate = sysdate,  msisdn = :1 where   id = :2", req.Msisdn, id.id)
 	db.Close()
 
 	defer db.Close()
